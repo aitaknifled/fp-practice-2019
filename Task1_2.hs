@@ -7,48 +7,51 @@ module Task1_2 where
 
 import Todo(todo)
 
--- синус числа (формула Тейлора)
-sin :: Double -> Double
-sin x = todo
+--fac :: Integer -> Integer
+fac 0 = 1
+fac n =
+  if n > 0 then n * fac (n - 1) else -1
 
+pow :: Double -> Integer -> Double
+pow x 0 = 1
+pow x n = x * pow x (n - 1)
+
+
+--синус числа (формула Тейлора)
+sinn :: Double -> Double
+sinn x = summ x 0
+  where
+  summ :: Double -> Integer -> Double
+  summ x 10 = 0
+  summ x n = ((-1) ^ n * x ^ (2 * n + 1) / fromIntegral (fac (2 * n + 1))) + summ x (n + 1)
+  
 -- косинус числа (формула Тейлора)
-cos :: Double -> Double
-cos x = todo
-
+coss :: Double -> Double
+coss x = summ x 0
+  where
+  summ :: Double -> Integer -> Double
+  summ x 10 = 0
+  summ x n = ((-1) ^ n * x ^ (2 * n) / fromIntegral (fac (2 * n))) + summ x (n + 1)
+  
 -- наибольший общий делитель двух чисел
-gcd :: Integer -> Integer -> Integer
-gcd x y = todo
-
--- существует ли полный целочисленный квадрат в диапазоне [from, to)?
-doesSquareBetweenExist :: Integer -> Integer -> Bool
-doesSquareBetweenExist from to = todo
-
--- является ли дата корректной с учётом количества дней в месяце и
--- вискокосных годов?
-isDateCorrect :: Integer -> Integer -> Integer -> Bool
-isDateCorrect day month year = todo
-
--- возведение числа в степень, duh
--- готовые функции и плавающую арифметику использовать нельзя
-pow :: Integer -> Integer -> Integer
-pow x y = todo
+gcdd :: Integer -> Integer -> Integer
+gcdd x y = func x y 2 1
+  where 
+  func :: Integer -> Integer -> Integer -> Integer -> Integer
+  func 1 y n nod = nod
+  func x 1 n nod = nod
+  func x y n nod = 
+    if (x `mod` n) == 0 && (y `mod` n) == 0 then func (x `div` n) (y `div` n) n (nod * n) 
+      else if (x `mod` n) == 0 then func (x `div` n) y n nod
+             else if (y `mod` n) == 0 then func x (y `div` n) n nod
+                    else func x y (n + 1) nod
 
 -- является ли данное число простым?
 isPrime :: Integer -> Bool
-isPrime x = todo
-
-type Point2D = (Double, Double)
-
--- рассчитайте площадь многоугольника по формуле Гаусса
--- многоугольник задан списком координат
-shapeArea :: [Point2D] -> Double
-shapeArea points = todo
-
--- треугольник задан своими координатами.
--- функция должна вернуть
---  0, если он тупоугольный
---  1, если он остроугольный
---  2, если он прямоугольный
---  -1, если это не треугольник
-triangleKind :: Point2D -> Point2D -> Point2D -> Integer
-triangleKind a b c = todo
+isPrime x = func x 2
+  where 
+  func :: Integer -> Integer -> Bool
+  func x n = 
+    if x == n then True
+      else if (x `mod` n) /= 0 then func x (n + 1)
+             else False
